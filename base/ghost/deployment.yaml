@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost
+spec:
+  selector:
+    matchLabels:
+      app: ghost
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ghost
+    spec:
+      containers:
+      - image: ghost:5.11
+        name: ghost
+        env:
+        - name: database__client
+          value: mysql
+        - name: database__connection__host
+          value: mysq
+        - name: database__connection__user
+          value: ghost
+        - name: database__connection__password
+          valueFrom:
+            secretKeyRef:
+              name: mysql-ghost-password
+              key: password
+        ports:
+        - containerPort: 3306
+          name: mysql
