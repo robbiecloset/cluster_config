@@ -20,3 +20,17 @@ TODO: how do I incorporate this such that it doesn't need to be a manual step be
 ```sh
 kubectl apply -f base/
 ```
+
+## Shortcuts that you (John) will forget or have already forgotten
+
+### Get name of pod
+
+```sh
+kubectl get pods -l <label_key>=<label_value> -o jsonpath'{.items..metadata.name}'
+```
+
+### Get a secret
+
+```sh
+kubectl get secret <secret_name> -o jsonpath='{.data.<key>}' | base64 -D
+```
