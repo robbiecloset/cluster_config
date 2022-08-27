@@ -34,3 +34,11 @@ kubectl get pods -l <label_key>=<label_value> -o jsonpath'{.items..metadata.name
 ```sh
 kubectl get secret <secret_name> -o jsonpath='{.data.<key>}' | base64 -D
 ```
+
+### Connect to msyql
+
+kubectl run -it --rm \
+  --image=mysql:8-debian \
+  --restart=Never \
+    mysql-client -- \
+      mysql -h mysql -p$(kubectl get secret mysql-root-password -o jsonpath='{.data.password}' | base64 -D)
