@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: ghost
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: ghost
@@ -19,15 +20,37 @@ spec:
         env:
         - name: database__client
           value: mysql
-        - name: database__connection__host
-          value: mysq
-        - name: database__connection__user
+        - name: database__connection__database
           value: ghost
+        - name: database__connection__host
+          value: mysql
         - name: database__connection__password
           valueFrom:
             secretKeyRef:
-              name: mysql-ghost-password
+              name: mysql-root-password
               key: password
+        - name: database__connection__user
+          value: root
+        # patch
+        - name: NODE_ENV
+          value: development
         ports:
-        - containerPort: 3306
-          name: mysql
+        - containerPort: 2368
+          hostPort: 8080
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ghost
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: ghost
