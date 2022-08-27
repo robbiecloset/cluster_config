@@ -37,8 +37,10 @@ kubectl get secret <secret_name> -o jsonpath='{.data.<key>}' | base64 -D
 
 ### Connect to msyql
 
+```sh
 kubectl run -it --rm \
-  --image=mysql:8-debian \
+  --image=$(kubectl get deployments --field-selector metadata.name=mysql -o jsonpath='{.items..spec.template.spec.containers..image}') \
   --restart=Never \
     mysql-client -- \
       mysql -h mysql -p$(kubectl get secret mysql-root-password -o jsonpath='{.data.password}' | base64 -D)
+```
