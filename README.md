@@ -6,6 +6,8 @@ Getting a cluster going for a blog & the meander sequencer.
 
 ### Preflight
 
+#### kubernetes-secret-generator
+
 Using `kubernetes-secret-generator` for... generating secrets:
 
 ```sh
@@ -14,6 +16,29 @@ helm upgrade --install kubernetes-secret-generator mittwald/kubernetes-secret-ge
 ```
 
 TODO: how do I incorporate this such that it doesn't need to be a manual step before `apply`?
+
+#### Create the cluster
+
+Special config for the cluster is necessary if we want ingress to work.
+
+```sh
+kind create cluster --config=./kubernetes/kind/cluster.yaml
+```
+
+#### ingress
+
+(Directions taken from [here][1], in case they stop working.)
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+```
+
+```sh
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+```
 
 ### `apply`'ing
 
@@ -44,3 +69,5 @@ kubectl run -it --rm \
     mysql-client -- \
       mysql -h mysql -p$(kubectl get secret mysql-root-password -o jsonpath='{.data.password}' | base64 -D)
 ```
+
+[1]: https://kind.sigs.k8s.io/docs/user/ingress/

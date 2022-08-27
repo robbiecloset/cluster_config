@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ghost
+  labels:
+    app: ghost
 spec:
   replicas: 1
   selector:
@@ -34,9 +36,10 @@ spec:
         # patch
         - name: NODE_ENV
           value: development
+        - name: url
+          value: https://localhost
         ports:
         - containerPort: 2368
-          hostPort: 8080
         resources:
           requests:
             memory: "256Mi"
@@ -50,7 +53,8 @@ kind: Service
 metadata:
   name: ghost
 spec:
-  ports:
-  - port: 8080
   selector:
     app: ghost
+  ports:
+  - port: 80
+    targetPort: 2368
