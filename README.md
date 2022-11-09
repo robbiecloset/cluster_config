@@ -6,17 +6,6 @@ Getting a cluster going for a blog & the meander sequencer.
 
 ### Preflight
 
-#### kubernetes-secret-generator
-
-Using `kubernetes-secret-generator` for... generating secrets:
-
-```sh
-helm repo add mittwald https://helm.mittwald.de
-helm upgrade --install kubernetes-secret-generator mittwald/kubernetes-secret-generator
-```
-
-TODO: how do I incorporate this such that it doesn't need to be a manual step before `apply`?
-
 #### Create the cluster
 
 Special config for the cluster is necessary if we want ingress to work.
@@ -39,6 +28,17 @@ kubectl wait --namespace ingress-nginx \
   --selector=app.kubernetes.io/component=controller \
   --timeout=90s
 ```
+
+#### kubernetes-secret-generator
+
+Using `kubernetes-secret-generator` for... generating secrets:
+
+```sh
+helm repo add mittwald https://helm.mittwald.de
+helm upgrade --install kubernetes-secret-generator mittwald/kubernetes-secret-generator
+```
+
+TODO: how do I incorporate this such that it doesn't need to be a manual step before `apply`?
 
 ### `apply`'ing
 
