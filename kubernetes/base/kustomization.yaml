@@ -6,6 +6,11 @@ metadata:
 commonLabels:
   app: ghost
 
+configMapGenerator:
+  - name: ghost-configmap
+    envs:
+      - .env.ghost
+
 resources:
 - ghost/deployment.yaml
 - ghost/ingress.yaml
@@ -14,4 +19,3 @@ resources:
 - mysql/deployment.yaml
 - mysql/pvc.yaml
 - mysql/secrets.yaml
-# - configMap.yaml

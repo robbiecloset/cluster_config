@@ -23,21 +23,35 @@ spec:
         - name: database__client
           value: mysql
         - name: database__connection__database
-          value: ghost
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-configmap
+              key: database__connection__database
         - name: database__connection__host
-          value: mysql
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-configmap
+              key: database__connection__host
         - name: database__connection__password
           valueFrom:
             secretKeyRef:
               name: mysql-root-password
               key: password
         - name: database__connection__user
-          value: root
-        # patch
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-configmap
+              key: database__connection__user
         - name: NODE_ENV
-          value: development
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-configmap
+              key: NODE_ENV
         - name: url
-          value: https://localhost
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-configmap
+              key: url
         ports:
         - containerPort: 2368
         resources:
@@ -46,7 +60,7 @@ spec:
             cpu: "500m"
           limits:
             memory: "512Mi"
-            cpu: "1000m"
+            cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
