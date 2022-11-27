@@ -6,13 +6,6 @@ metadata:
 commonLabels:
   app: ghost
 
-configMapGenerator:
-  - name: ghost-configmap
-    namespace: ghost
-    envs:
-      - .env.ghost
-
-
 resources:
 - namespace.yaml
 
