@@ -1,9 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  labels:
+    app: ghost
   name: mysql-pv-claim
+  namespace: ghost
 spec:
-  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
@@ -17,7 +19,6 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
   capacity:
     storage: 20Gi
   accessModes:

@@ -1,19 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
   labels:
-    app: mysql
+    app: ghost
+  name: ghost-mysql
+  namespace: ghost
 spec:
   selector:
     matchLabels:
-      app: mysql
+      app: ghost
+      tier: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql
+        app: ghost
+        tier: mysql
     spec:
       containers:
       - image: mysql:8-debian
@@ -45,9 +48,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  labels:
+    app: ghost
+  name: ghost-mysql
+  namespace: ghost
 spec:
   ports:
   - port: 3306
   selector:
-    app: mysql
+    app: ghost
+    tier: mysql
