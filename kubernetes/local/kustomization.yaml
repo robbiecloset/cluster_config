@@ -1,0 +1,8 @@
+bases:
+  - ../base
+
+configMapGenerator:
+  - name: ghost-configmap
+    namespace: ghost
+    envs:
+      - .env.ghost

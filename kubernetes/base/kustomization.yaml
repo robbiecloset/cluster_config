@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+metadata:
+  name: ghost
+
+commonLabels:
+  app: ghost
+
+resources:
+- namespace.yaml
+
+- ghost/deployment.yaml
+- ghost/ingress.yaml
+- ghost/tls-secret.yaml
+
+- mysql/deployment.yaml
+- mysql/pvc.yaml
+- mysql/secrets.yaml
