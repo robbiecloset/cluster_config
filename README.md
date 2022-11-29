@@ -19,14 +19,11 @@ kind create cluster --config=./kubernetes/kind/cluster.yaml
 (Directions taken from [here][1], in case they stop working.)
 
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-```
-
-```sh
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=90s
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml && \
+  kubectl wait --namespace ingress-nginx \
+    --for=condition=ready pod \
+    --selector=app.kubernetes.io/component=controller \
+    --timeout=90s
 ```
 
 #### kubernetes-secret-generator
@@ -35,7 +32,7 @@ Using `kubernetes-secret-generator` for... generating secrets:
 
 ```sh
 helm repo add mittwald https://helm.mittwald.de
-helm upgrade --install -n ghost kubernetes-secret-generator mittwald/kubernetes-secret-generator
+helm upgrade --install kubernetes-secret-generator mittwald/kubernetes-secret-generator
 ```
 
 TODO: how do I incorporate this such that it doesn't need to be a manual step before `apply`?
@@ -43,7 +40,7 @@ TODO: how do I incorporate this such that it doesn't need to be a manual step be
 ### `apply`'ing
 
 ```sh
-kubectl apply -k ./kubernetes/base
+kubectl apply -k ./kubernetes/local
 ```
 
 ## Shortcuts that you (John) will forget or have already forgotten
