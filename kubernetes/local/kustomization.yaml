@@ -1,6 +1,11 @@
 bases:
   - ../base
 
+resources:
+- mysql/deployment.yaml
+- mysql/pvc.yaml
+- mysql/secrets.yaml
+
 configMapGenerator:
   - name: ghost-configmap
     namespace: ghost
