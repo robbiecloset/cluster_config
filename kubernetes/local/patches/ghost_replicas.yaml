@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ghost
+  name: ghost-server
+  namespace: ghost
+spec:
+  replicas: 3
