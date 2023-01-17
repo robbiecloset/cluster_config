@@ -6,7 +6,9 @@ Getting a cluster going for a blog & the meander sequencer.
 
 ### Preflight
 
-#### Create the cluster
+#### Local
+
+##### Create the cluster
 
 Special config for the cluster is necessary if we want ingress to work.
 
@@ -14,7 +16,7 @@ Special config for the cluster is necessary if we want ingress to work.
 kind create cluster --config=./kubernetes/kind/cluster.yaml
 ```
 
-#### ingress
+##### ingress
 
 (Directions taken from [here][1], in case they stop working.)
 
@@ -26,7 +28,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main
     --timeout=90s
 ```
 
-#### kubernetes-secret-generator
+##### kubernetes-secret-generator
 
 Using `kubernetes-secret-generator` for... generating secrets:
 
@@ -36,6 +38,30 @@ helm upgrade --install kubernetes-secret-generator mittwald/kubernetes-secret-ge
 ```
 
 TODO: how do I incorporate this such that it doesn't need to be a manual step before `apply`?
+
+#### Prod (on digital ocean)
+
+##### Create the cluster & the db
+
+```sh
+cd terraform/production
+terraform init # if it's your first time
+terraform apply
+```
+
+##### Setup cluster dependencies
+
+```sh
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml
+
+git ls-remote --tags https://github.com/digitalocean/do-operator | grep -o 'v.*' | sort -r | head -1 | { \
+  read -r tag; curl --silent https://raw.githubusercontent.com/digitalocean/do-operator/$tag/releases/do-operator-$tag.yaml \
+} | DO_TOKEN=wooper yq e '(.data | select(. | has("access-token"))).access-token|=strenv(DO_TOKEN)'
+
+curl --silent https://raw.githubusercontent.com/digitalocean/do-operator/$(git ls-remote --tags https://github.com/digitalocean/do-operator | grep -o 'v.*' | sort -r | head -1)/releases/do-operator-v0.1.5.yaml
+
+curl --silent https://raw.githubusercontent.com/digitalocean/do-operator/v0.1.5/releases/do-operator-v0.1.5.yaml | yq e '(.data | select(. | has("access-token"))).access-token|="wooper"'
+```
 
 ### `apply`'ing
 
