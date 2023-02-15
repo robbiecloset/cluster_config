@@ -54,13 +54,12 @@ terraform apply
 ```sh
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml
 
-git ls-remote --tags https://github.com/digitalocean/do-operator | grep -o 'v.*' | sort -r | head -1 | { \
-  read -r tag; curl --silent https://raw.githubusercontent.com/digitalocean/do-operator/$tag/releases/do-operator-$tag.yaml \
-} | DO_TOKEN=wooper yq e '(.data | select(. | has("access-token"))).access-token|=strenv(DO_TOKEN)'
+# export a base64 encoded token as env var DO_TOKEN
+export DO_TOKEN=$(echo -n "<token_string>" | base64)
 
-curl --silent https://raw.githubusercontent.com/digitalocean/do-operator/$(git ls-remote --tags https://github.com/digitalocean/do-operator | grep -o 'v.*' | sort -r | head -1)/releases/do-operator-v0.1.5.yaml
-
-curl --silent https://raw.githubusercontent.com/digitalocean/do-operator/v0.1.5/releases/do-operator-v0.1.5.yaml | yq e '(.data | select(. | has("access-token"))).access-token|="wooper"'
+curl --silent https://raw.githubusercontent.com/digitalocean/do-operator/v0.1.5/releases/do-operator-v0.1.5.yaml | \
+  yq e '(.data | select(. | has("access-token"))).access-token|=strenv(DO_TOKEN)' | \
+    kubectl apply -f -
 ```
 
 ### `apply`'ing
@@ -91,6 +90,12 @@ kubectl run -it --namespace ghost --rm \
   --restart=Never \
     mysql-client -- \
       mysql -h ghost-mysql -p$(kubectl get secret -n ghost mysql-root-password -o jsonpath='{.data.password}' | base64 -D)
+```
+
+### Shell in cluster
+
+```sh
+kubectl run my-shell --rm -i --tty --image ubuntu -- bash
 ```
 
 [1]: https://kind.sigs.k8s.io/docs/user/ingress/
