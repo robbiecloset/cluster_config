@@ -5,6 +5,7 @@ resource "digitalocean_database_cluster" "ghost-mysql" {
   size       = "db-s-1vcpu-1gb"
   region     = "nyc3"
   node_count = 1
+  private_network_uuid = digitalocean_vpc.ambient.id
 }
 
 resource "digitalocean_database_firewall" "ghost-mysql-fw" {
