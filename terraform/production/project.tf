@@ -3,7 +3,7 @@ resource "digitalocean_project" "ambient" {
 
   description = "Project for blog & the long radio."
   environment = "Production"
-  is_default  = false
+  is_default  = true
   purpose     = "Web Application"
 }
 
