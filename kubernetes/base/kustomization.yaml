@@ -8,7 +8,4 @@ commonLabels:
 
 resources:
 - namespace.yaml
-
 - ghost/deployment.yaml
-- ghost/ingress.yaml
-- ghost/tls-secret.yaml
