@@ -1,0 +1,15 @@
+
+resources:
+- dcr.yaml
+- ../base
+
+configMapGenerator:
+- envs:
+  - .env.ghost
+  name: ghost-configmap
+  namespace: ghost
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+patches:
+- path: patches/ghost_env.yaml

@@ -1,0 +1,19 @@
+apiVersion: databases.digitalocean.com/v1alpha1
+kind: DatabaseClusterReference
+metadata:
+  name: ghost-mysql-cluster
+  namespace: ghost
+spec:
+  uuid: e6471116-fb95-45ca-8a1a-e62f215dbb80
+---
+apiVersion: databases.digitalocean.com/v1alpha1
+kind: DatabaseUser
+metadata:
+  name: ghost-mysql-cluster-user
+  namespace: ghost
+spec:
+  databaseCluster:
+    apiGroup: databases.digitalocean.com
+    kind: DatabaseClusterReference
+    name: ghost-mysql-cluster
+  username: ghost_mysql_user
