@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ghost
+  name: ghost-server
+  namespace: ghost
+spec:
+  template:
+    spec:
+      containers:
+      - name: ghost
+        env:
+        - name: database__connection__host
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-mysql-cluster-private-connection
+              key: host
+        - name: database__connection__password
+          valueFrom:
+            secretKeyRef:
+              name: ghost-mysql-cluster-user-credentials
+              key: password
+        - name: database__connection__user
+          valueFrom:
+            configMapKeyRef:
+              $patch: delete
+            secretKeyRef:
+              name: ghost-mysql-cluster-user-credentials
+              key: username
+        - name: database__connection__port
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-mysql-cluster-private-connection
+              key: port
+        - name: database__connection__database
+          valueFrom:
+            configMapKeyRef:
+              name: ghost-mysql-cluster-private-connection
+              key: database

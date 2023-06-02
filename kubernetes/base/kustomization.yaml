@@ -8,11 +8,4 @@ commonLabels:
 
 resources:
 - namespace.yaml
-
 - ghost/deployment.yaml
-- ghost/ingress.yaml
-- ghost/tls-secret.yaml
-
-- mysql/deployment.yaml
-- mysql/pvc.yaml
-- mysql/secrets.yaml
